@@ -1,29 +1,28 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react'
-import { Todo } from '../TodoList'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import styles from './TaskInput.module.scss'
 
 interface TaskInputProps {
-  setItems: Dispatch<SetStateAction<Todo[]>>
+  addTodo: (name: string) => void
 }
 
-const TaskInput = ({ setItems }: TaskInputProps) => {
-  const [name, setName] = useState('')
+const TaskInput = ({ addTodo }: TaskInputProps) => {
+  const [name, setName] = useState<string>('')
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setItems((prevState) => [...prevState, { name, done: false, id: prevState.length }])
+    addTodo(name)
     setName('')
   }
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setName(event.currentTarget.value)
+  const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setName(target.value)
   }
 
   return (
     <div className='mb-2'>
       <h1 className={styles.title}>To do list typescript</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <input type='text' placeholder='caption goes here' value={name} onChange={handleChange} />
+        <input type='text' placeholder='caption goes here' value={name} onChange={handleInputChange} />
         <button type='submit'>➕</button>
       </form>
     </div>
