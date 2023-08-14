@@ -4,15 +4,21 @@ import styles from './TaskList.module.scss'
 
 interface TaskListProps {
   todos: Todo[]
-  doneTaskList?: boolean
+  doneTaskList: boolean
+  startEditTodo: (id: string) => void
+  deleteTodo: (id: string) => void
   doneTodo: (id: string, done: boolean) => void
 }
 
-const TaskList = ({ todos, doneTaskList, doneTodo }: TaskListProps) => {
+const TaskList = ({ todos, doneTaskList, startEditTodo, deleteTodo, doneTodo }: TaskListProps) => {
   const filterTodoList = todos.filter((todo) => todo.done === doneTaskList)
 
   const handleCheckboxChange = (todoId: string) => (event: ChangeEvent<HTMLInputElement>) =>
     doneTodo(todoId, event.target.checked)
+
+  const handleEditTodoChange = (todoId: string) => () => startEditTodo(todoId)
+
+  const handleDeleteTodoChange = (todoId: string) => () => deleteTodo(todoId)
 
   return (
     <div className='mb-2'>
@@ -28,8 +34,12 @@ const TaskList = ({ todos, doneTaskList, doneTodo }: TaskListProps) => {
             />
             <span className={`${styles.taskName} ${todo.done && styles.taskNameDone}`}>{todo.name}</span>
             <div className={styles.taskActions}>
-              <button className={styles.taskBtn}>📝</button>
-              <button className={styles.taskBtn}>🗑️</button>
+              <button className={styles.taskBtn} onClick={handleEditTodoChange(todo.id)}>
+                📝
+              </button>
+              <button className={styles.taskBtn} onClick={handleDeleteTodoChange(todo.id)}>
+                🗑️
+              </button>
             </div>
           </div>
         ))}
