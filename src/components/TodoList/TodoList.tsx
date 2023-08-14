@@ -21,6 +21,7 @@ const syncReactToLocal = (handleNewTodos: HandleNewTodo) => {
 const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([])
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null)
+  // const [currentTodo, setCurrentTodo] = useState<Todo | null>()
 
   useEffect(() => {
     const todosStr = localStorage.getItem('todos')
