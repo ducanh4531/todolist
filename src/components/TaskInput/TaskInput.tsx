@@ -4,6 +4,7 @@ import { Todo } from '../../@types/todo.type'
 import connect from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
 import { debug, log } from '../../constants'
+import { Title } from '../Title'
 import styles from './TaskInput.module.scss'
 
 interface TaskInputProps {
@@ -24,7 +25,9 @@ const TaskInput = ({
   const [name, setName] = useState<string>('')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  log(debug)
+  // log(debug)
+
+  const address = { street: 'Hanoi' }
 
   useEffect(() => {
     if (inputRef.current) {
@@ -53,7 +56,7 @@ const TaskInput = ({
 
   return (
     <div className='mb-2'>
-      <h1 className={styles.title}>To do list typescript</h1>
+      <Title address={address} />
       <form className={styles.form} onSubmit={handleSubmit}>
         <input
           type='text'
