@@ -1,19 +1,26 @@
 import PropTypes from 'prop-types'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { Todo } from '../../@types/todo.type'
-import connect, { ExtraInfoType } from '../../HOC/connect'
+import connect from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
 import { debug, log } from '../../constants'
 import styles from './TaskInput.module.scss'
 
-interface TaskInputProps extends ExtraInfoType {
+interface TaskInputProps {
   addTodo: (name: string) => void
   editTodo: (name: string) => void
   finishEditTodo: () => void
   currentTodo: Todo | null
 }
 
-const TaskInput = ({ addTodo, editTodo, finishEditTodo, currentTodo, debug, log }: TaskInputProps) => {
+const TaskInput = ({
+  addTodo,
+  editTodo,
+  finishEditTodo,
+  currentTodo,
+  debug,
+  log
+}: TaskInputProps & typeof injectedProps) => {
   const [name, setName] = useState<string>('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -65,7 +72,9 @@ TaskInput.propTypes = {
   addTodo: PropTypes.func.isRequired,
   editTodo: PropTypes.func.isRequired,
   finishEditTodo: PropTypes.func.isRequired,
-  currentTodo: TodoTypes
+  currentTodo: PropTypes.oneOfType([TodoTypes, PropTypes.oneOf([null])])
 }
 
-export default connect({ debug, log })(TaskInput)
+const injectedProps = { debug, log }
+
+export default connect(injectedProps)(TaskInput)
