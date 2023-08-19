@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types'
 import { ChangeEvent } from 'react'
 import { Todo } from '../../@types/todo.type'
+import connect, { InjectedType } from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
 import styles from './TaskList.module.scss'
 
-interface TaskListProps {
+interface TaskListProps extends InjectedType {
   todos: Todo[]
   doneTaskList?: boolean
   startEditTodo: (id: string) => void
@@ -58,4 +59,4 @@ TaskList.propTypes = {
   doneTodo: PropTypes.func.isRequired
 }
 
-export default TaskList
+export default connect({ user: { name: 'Anton' } })(TaskList)

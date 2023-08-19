@@ -1,19 +1,23 @@
 import PropTypes from 'prop-types'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { Todo } from '../../@types/todo.type'
+import connect, { ExtraInfoType } from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
+import { debug, log } from '../../constants'
 import styles from './TaskInput.module.scss'
 
-interface TaskInputProps {
+interface TaskInputProps extends ExtraInfoType {
   addTodo: (name: string) => void
   editTodo: (name: string) => void
   finishEditTodo: () => void
   currentTodo: Todo | null
 }
 
-const TaskInput = ({ addTodo, editTodo, finishEditTodo, currentTodo }: TaskInputProps) => {
+const TaskInput = ({ addTodo, editTodo, finishEditTodo, currentTodo, debug, log }: TaskInputProps) => {
   const [name, setName] = useState<string>('')
   const inputRef = useRef<HTMLInputElement>(null)
+
+  log(debug)
 
   useEffect(() => {
     if (inputRef.current) {
@@ -64,4 +68,4 @@ TaskInput.propTypes = {
   currentTodo: TodoTypes
 }
 
-export default TaskInput
+export default connect({ debug, log })(TaskInput)
