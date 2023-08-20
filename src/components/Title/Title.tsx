@@ -10,8 +10,8 @@ const Title = ({ address }: TitleProps) => {
   return <h1 className={styles.title}>To do list typescript</h1>
 }
 
-function equal(prevProps: TitleProps, nextProps: TitleProps) {
-  return prevProps.address.street === nextProps.address.street
-}
+// function equal(prevProps: TitleProps, nextProps: TitleProps) {
+//   return prevProps.address.street === nextProps.address.street
+// }
 
-export default React.memo(Title, equal)
+export default React.memo(Title)

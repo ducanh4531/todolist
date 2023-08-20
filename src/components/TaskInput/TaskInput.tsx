@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { Todo } from '../../@types/todo.type'
 import connect from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
@@ -27,7 +27,7 @@ const TaskInput = ({
 
   // log(debug)
 
-  const address = { street: 'Hanoi' }
+  const address = useMemo(() => ({ street: 'Hanoi' }), [])
 
   useEffect(() => {
     if (inputRef.current) {
