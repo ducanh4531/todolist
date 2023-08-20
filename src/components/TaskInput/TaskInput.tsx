@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Todo } from '../../@types/todo.type'
 import connect from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
@@ -29,6 +29,8 @@ const TaskInput = ({
 
   const address = useMemo(() => ({ street: 'Hanoi' }), [])
 
+  const handleTitleClick = useCallback((value: any) => console.log(value), [])
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
@@ -56,7 +58,7 @@ const TaskInput = ({
 
   return (
     <div className='mb-2'>
-      <Title address={address} />
+      <Title address={address} onTitleClick={handleTitleClick} />
       <form className={styles.form} onSubmit={handleSubmit}>
         <input
           type='text'
