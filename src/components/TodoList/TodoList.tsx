@@ -1,55 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { Todo } from '../../@types/todo.type'
+import { addAction, deleteAction, doneAction, editAction, loadAction } from '../../reducer/action'
+import reducer from '../../reducer/reducer'
 import { TaskInput } from '../TaskInput'
 import { TaskList } from '../TaskList'
 import styles from './TodoList.module.scss'
 
-// interface HandleNewTodo {
-//   (todos: Todo[]): Todo[]
-// }
-
-type HandleNewTodo = (todos: Todo[]) => Todo[]
-
-const syncReactToLocal = (handleNewTodos: HandleNewTodo) => {
-  const todosStr = localStorage.getItem('todos')
-  const todosObj: Todo[] = JSON.parse(todosStr || '[]')
-  const newTodosObj = handleNewTodos(todosObj)
-
-  localStorage.setItem('todos', JSON.stringify(newTodosObj))
-}
-
 const TodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, dispatch] = useReducer(reducer, [])
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null)
 
   useEffect(() => {
     const todosStr = localStorage.getItem('todos')
     const todosObj: Todo[] = JSON.parse(todosStr || '[]')
 
-    setTodos(todosObj)
+    dispatch(loadAction(todosObj))
   }, [])
 
   const handleAddTodo = (name: string) => {
-    const todo: Todo = { name, done: false, id: new Date().toISOString() }
-    const handler = (todosObj: Todo[]) => [...todosObj, todo]
-
-    setTodos((prev) => [...prev, todo])
-
-    syncReactToLocal(handler)
+    dispatch(addAction(name))
   }
 
   const handleDoneTodo = (id: string, done: boolean) => {
-    const handler = (todosObj: Todo[]) =>
-      todosObj.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, done }
-        }
-        return todo
-      })
-
-    setTodos(handler)
-
-    syncReactToLocal(handler)
+    dispatch(doneAction({ id, done }))
   }
 
   const handleStartEditTodo = (id: string) => {
@@ -71,18 +44,9 @@ const TodoList = () => {
   }
 
   const finishEditTodo = () => {
-    const handler = (todosObj: Todo[]) =>
-      todosObj.map((todo) => {
-        if (todo.id === (currentTodo as Todo).id) {
-          return currentTodo as Todo
-        }
-        return todo
-      })
-
     setCurrentTodo(null)
-    setTodos(handler)
 
-    syncReactToLocal(handler)
+    dispatch(editAction(currentTodo))
   }
 
   const deleteTodo = (id: string) => {
@@ -90,11 +54,7 @@ const TodoList = () => {
       setCurrentTodo(null)
     }
 
-    const handler = (todosObj: Todo[]) => todosObj.filter((todo) => todo.id !== id)
-
-    setTodos(handler)
-
-    syncReactToLocal(handler)
+    dispatch(deleteAction(id))
   }
 
   return (
